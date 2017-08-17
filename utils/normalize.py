@@ -1,4 +1,4 @@
-from contractions import CONTRACTION_MAPPER
+from contraction_mapper import CONTRACTION_MAPPER
 import re
 import nltk
 import string
