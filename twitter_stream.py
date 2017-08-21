@@ -9,8 +9,7 @@ from tweepy import Stream
 
 from pymongo import MongoClient
 
-MONGO_HOST = 'mongodb://localhost/twitterdb'
-FILTERS = ['news']
+FILTERS = ['news', 'trump']
 
 class StreamListener(StreamListener):
     
@@ -23,7 +22,7 @@ class StreamListener(StreamListener):
 
     def on_data(self, data):
         try:
-            client = MongoClient(MONGO_HOST)
+            client = MongoClient('localhost', 27017)
             db = client.twitterdb
 
             datajson = json.loads(data)
@@ -32,17 +31,17 @@ class StreamListener(StreamListener):
             print('Tweet collected at: {}'.format(createdat))
             
             db.twitter_search.insert(datajson)
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
 
 
-auth = OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_secret)
+auth = OAuthHandler(config.CONSUMER_KEY, config.CONSUMER_SECRET)
+auth.set_access_token(config.ACCESS_TOKEN, config.ACCESS_TOKEN_SECRET)
 
 listener = StreamListener(api=tweepy.API(wait_on_rate_limit=True))
 streamer = Stream(auth=auth, listener=listener)
 
-print('Tracking: {}'.format(str(WORDS)))
-streamer.filter(track=WORDS)
+print('Tracking: {}'.format(str(FILTERS)))
+streamer.filter(track=FILTERS)
 
 
