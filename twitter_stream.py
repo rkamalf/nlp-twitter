@@ -42,6 +42,6 @@ listener = StreamListener(api=tweepy.API(wait_on_rate_limit=True))
 streamer = Stream(auth=auth, listener=listener)
 
 print('Tracking: {}'.format(str(FILTERS)))
-streamer.filter(track=FILTERS)
+streamer.filter(languages=['en'], track=FILTERS)
 
 
